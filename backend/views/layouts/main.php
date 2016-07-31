@@ -33,21 +33,28 @@ AppAsset::register($this);
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
-            $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
-            ];
+            if (!Yii::$app->user->isGuest) {
+                $menuItems = [
+                    ['label' => 'Dashboard', 'url' => ['/site/index']],
+                ];
+            }
             if (Yii::$app->user->isGuest) {
                 $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
             } else {
-                $menuItems[] = [
-                    'label' => 'Master Data',
-                    'items' => [
-                        ['label' => 'Vehicles', 'url' => ['/vehicle']],
-                        ['label' => 'Vehicle Models', 'url' => ['/vehicle-model']],
-                        ['label' => 'Filters', 'url' => ['/filter']],
-                        ['label' => 'Configurations', 'url' => ['/config']],
-                    ],
-                ];
+                $menuItems[] = ['label' => 'Registration', 'url' => ['/registration/index']];
+                
+                if (Yii::$app->user->identity->isAdmin()) {
+                    $menuItems[] = [
+                        'label' => 'Master Data',
+                        'items' => [
+                            ['label' => 'Vehicles', 'url' => ['/vehicle/index']],
+                            ['label' => 'Vehicle Models', 'url' => ['/vehicle-model/index']],
+                            ['label' => 'Filters', 'url' => ['/filter/index']],
+                            ['label' => 'Oil', 'url' => ['/oil/index']],
+                            ['label' => 'Configurations', 'url' => ['/config/index']],
+                        ],
+                    ];
+                }
 
                 $menuItems[] = '<li>'
                         . Html::beginForm(['/site/logout'], 'post')

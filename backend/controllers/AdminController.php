@@ -6,6 +6,8 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use backend\components\BAccessRule;
+use common\models\User;
 
 class AdminController extends Controller {
 
@@ -17,10 +19,13 @@ class AdminController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'ruleConfig' => [
+                    'class' => BAccessRule::className(),
+                ],
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => [User::ROLE_ADMIN],
                     ],
                 ],
             ],
@@ -31,11 +36,6 @@ class AdminController extends Controller {
                 ],
             ],
         ];
-    }
-
-    public function beforeAction($action)
-    {
-        return parent::beforeAction($action);
     }
 
 }

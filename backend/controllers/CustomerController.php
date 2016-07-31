@@ -3,24 +3,50 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\VehicleModel;
+use common\models\Customer;
 use yii\data\ActiveDataProvider;
-use backend\controllers\AdminController;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
- * VehicleModelController implements the CRUD actions for VehicleModel model.
+ * CustomerController implements the CRUD actions for Customer model.
  */
-class VehicleModelController extends AdminController {
+class CustomerController extends Controller {
 
     /**
-     * Lists all VehicleModel models.
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Lists all Customer models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => VehicleModel::find(),
+            'query' => Customer::find(),
         ]);
 
         return $this->render('index', [
@@ -29,7 +55,7 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Displays a single VehicleModel model.
+     * Displays a single Customer model.
      * @param integer $id
      * @return mixed
      */
@@ -41,13 +67,13 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Creates a new VehicleModel model.
+     * Creates a new Customer model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new VehicleModel();
+        $model = new Customer();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -59,7 +85,7 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Updates an existing VehicleModel model.
+     * Updates an existing Customer model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -78,7 +104,7 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Deletes an existing VehicleModel model.
+     * Deletes an existing Customer model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -91,15 +117,15 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Finds the VehicleModel model based on its primary key value.
+     * Finds the Customer model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return VehicleModel the loaded model
+     * @return Customer the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = VehicleModel::findOne($id)) !== null) {
+        if (($model = Customer::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

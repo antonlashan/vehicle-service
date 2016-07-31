@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%config}}".
@@ -12,8 +13,8 @@ use Yii;
  * @property string $description
  * @property string $price
  */
-class Config extends \yii\db\ActiveRecord
-{
+class Config extends ActiveRecord {
+
     /**
      * @inheritdoc
      */
@@ -48,4 +49,5 @@ class Config extends \yii\db\ActiveRecord
             'price' => 'Price',
         ];
     }
+
 }

@@ -122,3 +122,6 @@ a.desc:after {
     background-color: #6C0013;
     border-color: #6C0013;
 }
+.tab-content {
+    padding: 20px;
+}

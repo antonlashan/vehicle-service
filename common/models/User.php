@@ -19,6 +19,7 @@ use yii\db\Expression;
  * @property string $password_reset_token
  * @property string $email
  * @property string $auth_key
+ * @property integer $role
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -193,6 +194,15 @@ class User extends ActiveRecord implements IdentityInterface {
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function isAdmin()
+    {
+        if ($this->role == static::ROLE_ADMIN) {
+            return true;
+        }
+
+        return false;
     }
 
 }

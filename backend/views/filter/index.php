@@ -13,18 +13,27 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="filter-index">
 
     <p>
-    <?= Html::a('Create Filter', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Filter', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php Pjax::begin(); ?>    <?=
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'type',
-            'name',
-            'price',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
-<?php Pjax::end(); ?></div>
+    <div class="table-responsive">
+        <?php Pjax::begin(); ?>
+        <?=
+        GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'type',
+                    'value' => function($data) {
+                        return $data->getTypeLabel();
+                    },
+                ],
+                'name',
+                'price',
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+        ?>
+        <?php Pjax::end(); ?>
+    </div>
+</div>

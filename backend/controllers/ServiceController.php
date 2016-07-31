@@ -3,33 +3,61 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\VehicleModel;
+use common\models\Service;
 use yii\data\ActiveDataProvider;
-use backend\controllers\AdminController;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
+use common\models\Registration;
 
 /**
- * VehicleModelController implements the CRUD actions for VehicleModel model.
+ * ServiceController implements the CRUD actions for Service model.
+ * 
+ * @property Registration $registration
  */
-class VehicleModelController extends AdminController {
+class ServiceController extends Controller {
+
+    //registration
+    protected $registration = null;
+    protected $type = null;
 
     /**
-     * Lists all VehicleModel models.
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Lists all Service models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => VehicleModel::find(),
+            'query' => Service::find(),
         ]);
 
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
+                    'registration' => $this->registration,
+                    'type' => $this->type,
         ]);
     }
 
     /**
-     * Displays a single VehicleModel model.
+     * Displays a single Service model.
      * @param integer $id
      * @return mixed
      */
@@ -41,25 +69,25 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Creates a new VehicleModel model.
+     * Creates a new Service model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreateLubrication()
     {
-        $model = new VehicleModel();
+        $model = new Service();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->render('create-lubrication', [
                         'model' => $model,
             ]);
         }
     }
 
     /**
-     * Updates an existing VehicleModel model.
+     * Updates an existing Service model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -78,7 +106,7 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Deletes an existing VehicleModel model.
+     * Deletes an existing Service model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -91,19 +119,31 @@ class VehicleModelController extends AdminController {
     }
 
     /**
-     * Finds the VehicleModel model based on its primary key value.
+     * Finds the Service model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return VehicleModel the loaded model
+     * @return Service the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = VehicleModel::findOne($id)) !== null) {
+        if (($model = Service::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function beforeAction($action)
+    {
+        $this->registration = Registration::findOne(Yii::$app->request->get('rid'));
+        $this->type = Yii::$app->request->get('type');
+
+        if ($this->registration === null || $this->type === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        return parent::beforeAction($action);
     }
 
 }

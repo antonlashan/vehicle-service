@@ -13,16 +13,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="vehicle-index">
 
     <p>
-    <?= Html::a('Create Vehicle', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Vehicle', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php Pjax::begin(); ?>    <?=
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'name',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
-<?php Pjax::end(); ?></div>
+    <div class="table-responsive">
+        <?php Pjax::begin(); ?>    <?=
+        GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'name',
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]);
+        ?>
+        <?php Pjax::end(); ?>
+    </div>
+</div>

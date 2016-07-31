@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%vehicle}}".
@@ -12,8 +13,8 @@ use Yii;
  *
  * @property VehicleModel[] $vehicleModels
  */
-class Vehicle extends \yii\db\ActiveRecord
-{
+class Vehicle extends ActiveRecord {
+
     /**
      * @inheritdoc
      */
@@ -50,4 +51,5 @@ class Vehicle extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VehicleModel::className(), ['vehicle_id' => 'id']);
     }
+
 }

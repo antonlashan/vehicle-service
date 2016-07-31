@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%oil}}".
@@ -12,8 +13,15 @@ use Yii;
  * @property string $name
  * @property string $price
  */
-class Oil extends \yii\db\ActiveRecord
-{
+class Oil extends ActiveRecord {
+
+    const TYPE_ENGINE = 1;
+    const TYPE_BREAK = 2;
+    const TYPE_COOLENT = 3;
+    const TYPE_POWER = 4;
+    const TYPE_GEAR = 5;
+    const TYPE_DIFFERENTIAL = 6;
+
     /**
      * @inheritdoc
      */
@@ -28,7 +36,7 @@ class Oil extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'price'], 'required'],
+            [['type', 'price', 'name'], 'required'],
             [['type'], 'integer'],
             [['price'], 'number'],
             [['name'], 'string', 'max' => 30],
@@ -47,4 +55,22 @@ class Oil extends \yii\db\ActiveRecord
             'price' => 'Price',
         ];
     }
+
+    public function getTypeLabels()
+    {
+        return [
+            static::TYPE_ENGINE => 'Engine',
+            static::TYPE_BREAK => 'Break',
+            static::TYPE_COOLENT => 'Coolent',
+            static::TYPE_POWER => 'Power',
+            static::TYPE_GEAR => 'Gear',
+            static::TYPE_DIFFERENTIAL => 'Differential',
+        ];
+    }
+
+    public function getTypeLabel()
+    {
+        return isset($this->getTypeLabels()[$this->type]) ? $this->getTypeLabels()[$this->type] : null;
+    }
+
 }

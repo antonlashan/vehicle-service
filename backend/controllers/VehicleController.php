@@ -7,27 +7,11 @@ use common\models\Vehicle;
 use yii\data\ActiveDataProvider;
 use backend\controllers\AdminController;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * VehicleController implements the CRUD actions for Vehicle model.
  */
-class VehicleController extends AdminController
-{
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+class VehicleController extends AdminController {
 
     /**
      * Lists all Vehicle models.
@@ -40,7 +24,7 @@ class VehicleController extends AdminController
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -52,7 +36,7 @@ class VehicleController extends AdminController
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -69,7 +53,7 @@ class VehicleController extends AdminController
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -88,7 +72,7 @@ class VehicleController extends AdminController
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -121,4 +105,5 @@ class VehicleController extends AdminController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'type')->textInput() ?>
+    <?= $form->field($model, 'type')->dropDownList($model->getTypeLabels(), ['prompt' => 'Select a type']) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

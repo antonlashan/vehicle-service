@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%filter}}".
@@ -12,8 +13,12 @@ use Yii;
  * @property string $name
  * @property string $price
  */
-class Filter extends \yii\db\ActiveRecord
-{
+class Filter extends ActiveRecord {
+
+    const TYPE_OIL = 1;
+    const TYPE_DIESEL = 2;
+    const TYPE_AIR = 3;
+
     /**
      * @inheritdoc
      */
@@ -47,4 +52,19 @@ class Filter extends \yii\db\ActiveRecord
             'price' => 'Price',
         ];
     }
+
+    public function getTypeLabels()
+    {
+        return [
+            static::TYPE_OIL => 'Oil',
+            static::TYPE_DIESEL => 'Diesel',
+            static::TYPE_AIR => 'Air',
+        ];
+    }
+
+    public function getTypeLabel()
+    {
+        return isset($this->getTypeLabels()[$this->type]) ? $this->getTypeLabels()[$this->type] : null;
+    }
+
 }

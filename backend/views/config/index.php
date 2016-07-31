@@ -12,21 +12,22 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="config-index">
 
-
-    <?php Pjax::begin(); ?>    <?=
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'label',
-            'description',
-            'price',
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update}',
+    <div class="table-responsive">
+        <?php Pjax::begin(); ?>    <?=
+        GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'label',
+                'description',
+                'price',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {update}',
+                ],
             ],
-        ],
-    ]);
-    ?>
-    <?php Pjax::end(); ?>
+        ]);
+        ?>
+        <?php Pjax::end(); ?>
+    </div>
 </div>
