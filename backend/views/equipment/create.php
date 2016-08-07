@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Filter */
+/* @var $model common\models\Equipment */
 
-$this->title = 'Create Filter';
-$this->params['breadcrumbs'][] = ['label' => 'Filters', 'url' => ['index']];
+$this->title = 'Create Equipment';
+$this->params['breadcrumbs'][] = ['label' => 'Equipments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="filter-create">
+<div class="equipment-create">
 
     <?=
     $this->render('_form', [

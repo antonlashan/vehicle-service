@@ -7,7 +7,6 @@
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use backend\assets\AppAsset;
 use yii\web\View;
 use yii\helpers\Url;
@@ -97,6 +96,6 @@ $this->params['breadcrumbs'][] = $this->title;
 $options = [
     'urlGetModels' => Url::to(['registration/get-models']),
 ];
-$this->registerJs("var AS = " . json_encode($options) . ";", View::POS_END);
+$this->registerJs("var AS = " . json_encode($options) . ";", View::POS_HEAD);
 $this->registerJsFile('@web/js/registration_index.js', ['depends' => [AppAsset::className()]]);
 ?>

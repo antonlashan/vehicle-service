@@ -5,32 +5,37 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
+/* @var $searchModel backend\models\EquipmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Filters';
+$this->title = 'Equipments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="filter-index">
+<div class="equipment-index">
 
     <p>
-        <?= Html::a('Create Filter', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div class="table-responsive">
-        <?php Pjax::begin(); ?>
-        <?=
+        <?php Pjax::begin(); ?>    <?=
         GridView::widget([
             'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [
-                    'attribute' => 'type',
+                    'attribute' => 'category',
+                    'filter' => $searchModel->getCategoryLabels(),
                     'value' => function($data) {
-                        return $data->getTypeLabel();
+                        return $data->getCategoryLabel();
                     },
                 ],
                 'name',
                 'price',
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update} {delete}',
+                ],
             ],
         ]);
         ?>

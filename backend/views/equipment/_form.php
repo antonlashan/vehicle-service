@@ -4,15 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Filter */
+/* @var $model common\models\Equipment */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="filter-form">
+<div class="equipment-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'type')->dropDownList($model->getTypeLabels(), ['prompt' => 'Select a type']) ?>
+    <?= $form->field($model, 'category')->dropDownList($model->getCategoryLabels(), ['prompt' => 'Select a category']) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

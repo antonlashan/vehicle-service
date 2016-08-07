@@ -67,7 +67,7 @@ class RegistrationController extends Controller {
                 if ($customer->save()) {
                     $registration->customer_id = $customer->id;
                     if ($registration->save()) {
-                        return $this->redirect(['service/index', 'rid' => $registration->id, 'type' => Service::TYPE_LUBRICANT]);
+                        return $this->redirect(['service/index', 'rid' => $registration->id]);
                     }
                 }
             }

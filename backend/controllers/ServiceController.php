@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use common\models\Registration;
+use common\models\Equipment;
+use yii\helpers\ArrayHelper;
 
 /**
  * ServiceController implements the CRUD actions for Service model.
@@ -18,8 +20,7 @@ use common\models\Registration;
 class ServiceController extends Controller {
 
     //registration
-    protected $registration = null;
-    protected $type = null;
+    private $registration = null;
 
     /**
      * @inheritdoc
@@ -52,7 +53,6 @@ class ServiceController extends Controller {
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
                     'registration' => $this->registration,
-                    'type' => $this->type,
         ]);
     }
 
@@ -73,17 +73,32 @@ class ServiceController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateLubrication()
+    public function actionCreate()
     {
         $model = new Service();
+        $model->date = date("Y-m-d");
+        $model->no_of_grease_nipples = $this->registration->vehicleModel->no_of_nipples;
+
+        $equipmentsArr = $this->getAllEquipments();
+        //print_r(\yii\helpers\ArrayHelper::index($equipments, null, 'category'));
+//        print_r($equipments);
+        //exit;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create-lubrication', [
+            return $this->render('create', [
                         'model' => $model,
+                        'registration' => $this->registration,
+                        'equipmentsArr' => $equipmentsArr,
             ]);
         }
+    }
+
+    private function getAllEquipments()
+    {
+        $result = Equipment::find()->asArray()->all();
+        return ArrayHelper::index($result, 'id', 'category');
     }
 
     /**
@@ -101,6 +116,7 @@ class ServiceController extends Controller {
         } else {
             return $this->render('update', [
                         'model' => $model,
+                        'registration' => $this->registration,
             ]);
         }
     }
@@ -137,9 +153,8 @@ class ServiceController extends Controller {
     public function beforeAction($action)
     {
         $this->registration = Registration::findOne(Yii::$app->request->get('rid'));
-        $this->type = Yii::$app->request->get('type');
 
-        if ($this->registration === null || $this->type === null) {
+        if ($this->registration === null) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 

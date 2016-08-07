@@ -49,8 +49,7 @@ AppAsset::register($this);
                         'items' => [
                             ['label' => 'Vehicles', 'url' => ['/vehicle/index']],
                             ['label' => 'Vehicle Models', 'url' => ['/vehicle-model/index']],
-                            ['label' => 'Filters', 'url' => ['/filter/index']],
-                            ['label' => 'Oil', 'url' => ['/oil/index']],
+                            ['label' => 'Equipments', 'url' => ['/equipment/index']],
                             ['label' => 'Configurations', 'url' => ['/config/index']],
                         ],
                     ];

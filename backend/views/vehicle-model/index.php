@@ -24,7 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vehicle.name',
                 'model',
                 'no_of_nipples',
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update} {delete}',
+                ],
             ],
         ]);
         ?>

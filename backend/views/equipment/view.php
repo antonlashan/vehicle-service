@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Oil */
+/* @var $model common\models\Equipment */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Oils', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Equipments', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="oil-view">
+<div class="equipment-view">
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             [
-                'attribute' => 'type',
-                'value' => $model->getTypeLabel(),
+                'attribute' => 'category',
+                'value' => $model->getCategoryLabel(),
             ],
             'name',
             'price',
