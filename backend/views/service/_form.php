@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\View;
 use backend\assets\AppAsset;
 use common\models\Service;
+use common\models\Config;
 
 /* @var $this yii\web\View */
 /* @var $model Service */
@@ -104,28 +105,59 @@ use common\models\Service;
             <?= $form->field($model, 'coolent_oil_id')->dropDownList(isset($equipmentsArr[Equipment::CAT_OIL_COOLENT]) ? ArrayHelper::map($equipmentsArr[Equipment::CAT_OIL_COOLENT], 'id', 'name') : [], ['prompt' => '- select one -']) ?>
             <small id="coolent_oil_id_price" class="calc"></small>
         </div>
-        
+
         <div class="col-lg-4 col-md-6 m-b">
-            <?= $form->field($model, 'no_of_grease_nipples')->textInput() ?>
+            <?= $form->field($model, 'no_of_grease_nipples')->dropDownList($model->getNippleOptValues($model->no_of_grease_nipples)) ?>
+            <small id="no_of_grease_nipples_price" class="calc"></small>
         </div>
     </div>
 
+
+    <div class="row">
+        <div class="col-lg-4 col-md-6 m-b">
+            <?= $form->field($model, 'full_wash')->checkbox() ?>
+            <small id="full_wash_price" class="calc"></small>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 m-b">
+        <?= $form->field($model, 'body_wash')->checkbox() ?>
+        <small id="body_wash_price" class="calc"></small>
+    </div>
+
+    <div class="col-md-3 col-sm-6 m-b">
+        <?= $form->field($model, 'vacuume_cleaning')->checkbox() ?>
+        <small id="vacuume_cleaning_price" class="calc"></small>
+    </div>
+
+    <div class="col-md-3 col-sm-6 m-b">
+        <?= $form->field($model, 'under_wash')->checkbox() ?>
+        <small id="under_wash_price" class="calc"></small>
+    </div>
+
+    <div class="col-md-3 col-sm-6 m-b">
+        <?= $form->field($model, 'engine_wash')->checkbox() ?>
+        <small id="engine_wash_price" class="calc"></small>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-6 m-b">
+            <?= $form->field($model, 'discount')->dropDownList($model->getDiscountLabels()) ?>
+            <?= $form->field($model, 'discount_amount')->hiddenInput()->label(false) ?>
+            <small id="discount_price" class="calc"></small>
+        </div>
+
+        <div class="col-lg-4 col-md-6 m-b">
+            <?= $form->field($model, 'service_charge')->textInput(['maxlength' => true]) ?>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 m-b">
+            <?= $form->field($model, 'total')->textInput(['readonly' => true]) ?>
+        </div>
+    </div>
     
-
-    <?= $form->field($model, 'full_wash')->checkbox() ?>
-
-    <?= $form->field($model, 'body_wash')->checkbox() ?>
-
-    <?= $form->field($model, 'vacuume_cleaning')->checkbox() ?>
-
-    <?= $form->field($model, 'under_wash')->checkbox() ?>
-
-    <?= $form->field($model, 'engine_wash')->checkbox() ?>
-
-    <?= $form->field($model, 'discount')->dropDownList($model->getDiscountLabels()) ?>
-
-    <?= $form->field($model, 'service_charge')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'remarks')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">
@@ -140,15 +172,24 @@ use common\models\Service;
 $options = [
     'allEquipments' => $equipmentsArr,
     'categories' => [
-        'filter_oil' => Equipment::CAT_FILTER_OIL,
-        'filter_diesel' => Equipment::CAT_FILTER_DIESEL,
-        'filter_air' => Equipment::CAT_FILTER_AIR,
-        'oil_engine' => Equipment::CAT_OIL_ENGINE,
-        'oil_break' => Equipment::CAT_OIL_BREAK,
-        'oil_coolant' => Equipment::CAT_OIL_COOLENT,
-        'oil_power' => Equipment::CAT_OIL_POWER,
-        'oil_gear' => Equipment::CAT_OIL_GEAR,
-        'oil_differential' => Equipment::CAT_OIL_DIFFERENTIAL,
+        'filterOil' => Equipment::CAT_FILTER_OIL,
+        'filterDiesel' => Equipment::CAT_FILTER_DIESEL,
+        'filterAir' => Equipment::CAT_FILTER_AIR,
+        'oilEngine' => Equipment::CAT_OIL_ENGINE,
+        'oilBreak' => Equipment::CAT_OIL_BREAK,
+        'oilCoolant' => Equipment::CAT_OIL_COOLENT,
+        'oilPower' => Equipment::CAT_OIL_POWER,
+        'oilGear' => Equipment::CAT_OIL_GEAR,
+        'oilDifferential' => Equipment::CAT_OIL_DIFFERENTIAL,
+    ],
+    'globalCharges' => $globalChargesArr,
+    'globalChargeTypes' => [
+        'typeBodyWash' => Config::TYPE_BODY_WASH,
+        'typeEngineWash' => Config::TYPE_ENGINE_WASH,
+        'typeGreasePerNipple' => Config::TYPE_GREASE_PER_NIPPLE,
+        'typeUnderWash' => Config::TYPE_UNDER_WASH,
+        'typeVacuumeCleaning' => Config::TYPE_VACUUME_CLEANING,
+        'typeFullWashCharge' => Config::TYPE_FULL_WASH_CHARGE,
     ],
     'serviceThreshold' => Service::SERVICE_THRESHOLD,
 ];
@@ -157,6 +198,7 @@ $this->registerJsFile('@web/js/service__form.js', ['depends' => [AppAsset::class
 
 $css = ".form-group, .help-block {
     margin-bottom: 0;
-}";
+}
+#discount_price {color: red;}";
 $this->registerCss($css);
 ?>

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,31 +32,22 @@ $this->params['breadcrumbs'][] = "{$registration->vehicle_no} ({$registration->c
                 'current_meter',
                 'next_service_meter',
                 'next_service',
-                'engine_oil_id',
                 'engine_oil',
                 'engine_oil_price',
-                'oil_filter_id',
                 'oil_filter',
                 'oil_filter_price',
-                'diesel_filter_id',
                 'diesel_filter',
                 'diesel_filter_price',
-                'air_filter_id',
                 'air_filter',
                 'air_filter_price',
-                'gear_oil_id',
                 'gear_oil',
                 'gear_oil_price',
-                'differential_oil_id',
                 'differential_oil',
                 'differential_oil_price',
-                'steering_oil_id',
                 'steering_oil',
                 'steering_oil_price',
-                'break_oil_id',
                 'break_oil',
                 'break_oil_price',
-                'coolent_oil_id',
                 'coolent_oil',
                 'coolent_oil_price',
                 'no_of_grease_nipples',
@@ -75,10 +67,20 @@ $this->params['breadcrumbs'][] = "{$registration->vehicle_no} ({$registration->c
                 // 'created_by',
                 // 'updated_at',
                 // 'updated_by',
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]);
-        ?>
-        <?php Pjax::end(); ?>
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'buttons' => [
+                        'update' => function ($url, $model, $key) use($registration) {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Url::to(['update', 'id' => $model->id, 'rid' => $registration->id]));
+                        },
+                        'view' => function ($url, $model, $key) use($registration) {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Url::to(['view', 'id' => $model->id, 'rid' => $registration->id]));
+                        },
+                            ],
+                        ],
+                    ],
+                ]);
+                ?>
+                <?php Pjax::end(); ?>
     </div>
 </div>

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 /* @var $registration common\models\Registration */
 
 $this->title = 'Create Service';
-$this->params['breadcrumbs'][] = ['label' => 'Services', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Services', 'url' => ['index', 'rid' => $registration->id]];
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['breadcrumbs'][] = "{$registration->vehicle_no} ({$registration->vehicleModel->model})";
 ?>
@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = "{$registration->vehicle_no} ({$registration->v
     <?= $this->render('_form', [
         'model' => $model,
         'equipmentsArr' => $equipmentsArr,
+        'globalChargesArr' => $globalChargesArr,
     ]) ?>
 
 </div>

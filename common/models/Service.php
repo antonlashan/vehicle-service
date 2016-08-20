@@ -58,7 +58,9 @@ use yii\behaviors\BlameableBehavior;
  * @property boolean $engine_wash
  * @property string $engine_wash_charge
  * @property string $discount
+ * @property string $discount_amount
  * @property string $service_charge
+ * @property string $total
  * @property string $remarks
  * @property string $created_at
  * @property integer $created_by
@@ -90,7 +92,7 @@ class Service extends ActiveRecord {
         return [
             [['registration_id', 'customer_id', 'current_meter', 'next_service_meter', 'next_service', 'engine_oil_id', 'oil_filter_id', 'diesel_filter_id', 'air_filter_id', 'gear_oil_id', 'differential_oil_id', 'steering_oil_id', 'break_oil_id', 'coolent_oil_id', 'no_of_grease_nipples', 'created_by', 'updated_by'], 'integer'],
             [['date', 'created_at', 'updated_at'], 'safe'],
-            [['engine_oil_price', 'oil_filter_price', 'diesel_filter_price', 'air_filter_price', 'gear_oil_price', 'differential_oil_price', 'steering_oil_price', 'break_oil_price', 'coolent_oil_price', 'grease_charge', 'full_wash_charge', 'body_wash_charge', 'vacuume_cleaning_charge', 'under_wash_charge', 'engine_wash_charge', 'discount', 'service_charge'], 'number'],
+            [['engine_oil_price', 'oil_filter_price', 'diesel_filter_price', 'air_filter_price', 'gear_oil_price', 'differential_oil_price', 'steering_oil_price', 'break_oil_price', 'coolent_oil_price', 'grease_charge', 'full_wash_charge', 'body_wash_charge', 'vacuume_cleaning_charge', 'under_wash_charge', 'engine_wash_charge', 'discount', 'discount_amount', 'service_charge', 'total'], 'number'],
             [['full_wash', 'body_wash', 'vacuume_cleaning', 'under_wash', 'engine_wash'], 'boolean'],
             [['remarks'], 'string'],
             [['engine_oil', 'oil_filter', 'diesel_filter', 'air_filter', 'gear_oil', 'differential_oil', 'steering_oil', 'break_oil', 'coolent_oil'], 'string', 'max' => 50],
@@ -154,7 +156,9 @@ class Service extends ActiveRecord {
             'engine_wash' => 'Engine Wash',
             'engine_wash_charge' => 'Engine Wash Charge',
             'discount' => 'Discount',
+            'discount_amount' => 'Discount Amount',
             'service_charge' => 'Service Charge',
+            'total' => 'Total Charge',
             'remarks' => 'Remarks',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
@@ -225,7 +229,7 @@ class Service extends ActiveRecord {
     {
         $discounts = [];
         for ($d = 0; $d <= 50; $d = $d + 5) {
-            $discounts[$d] = "$d %";
+            $discounts[number_format($d, 2)] = "$d %";
         }
 
         return $discounts;
@@ -234,6 +238,98 @@ class Service extends ActiveRecord {
     public function getDiscountLabel()
     {
         return (isset($this->getDiscountLabels()[$this->discount]) ? $this->getDiscountLabels()[$this->discount] : null);
+    }
+
+    public function getNippleOptValues($nipCnt)
+    {
+        $data = [];
+        for ($i = 0; $i <= $nipCnt; $i++) {
+            $data[$i] = $i;
+        }
+
+        return $data;
+    }
+
+    public function getRegistrationNo()
+    {
+        return str_pad($this->id, 6, "0", STR_PAD_LEFT);
+    }
+
+    public function getGreaseChargeAmount()
+    {
+        return $this->no_of_grease_nipples * $this->grease_charge;
+    }
+
+    /**
+     * discount available only for wash categories
+     */
+    public function getDiscountPrice()
+    {
+        return $this->getWashCategoriesTotal() * $this->discount / 100;
+    }
+
+    public function getWashCategoriesTotal()
+    {
+        $total = 0;
+
+        if ($this->full_wash) {
+            return $this->full_wash_charge;
+        }
+
+        if ($this->body_wash) {
+            $total += $this->body_wash_charge;
+        }
+        if ($this->engine_wash) {
+            $total += $this->engine_wash_charge;
+        }
+        if ($this->under_wash) {
+            $total += $this->under_wash_charge;
+        }
+        if ($this->vacuume_cleaning) {
+            $total += $this->vacuume_cleaning_charge;
+        }
+
+        return $total;
+    }
+
+    public function getEquipmentCharges()
+    {
+        $total = 0;
+
+        if ($this->engine_oil_id) {
+            $total += $this->engine_oil_price;
+        }
+        if ($this->oil_filter_id) {
+            $total += $this->oil_filter_price;
+        }
+        if ($this->diesel_filter_id) {
+            $total += $this->diesel_filter_price;
+        }
+        if ($this->air_filter_id) {
+            $total += $this->air_filter_price;
+        }
+        if ($this->gear_oil_id) {
+            $total += $this->gear_oil_price;
+        }
+        if ($this->differential_oil_id) {
+            $total += $this->differential_oil_price;
+        }
+        if ($this->steering_oil_id) {
+            $total += $this->steering_oil_price;
+        }
+        if ($this->break_oil_id) {
+            $total += $this->break_oil_price;
+        }
+        if ($this->coolent_oil_id) {
+            $total += $this->coolent_oil_price;
+        }
+
+        return $total;
+    }
+
+    public function getFullTotal()
+    {
+        return $this->getEquipmentCharges() + $this->getWashCategoriesTotal() + $this->getGreaseChargeAmount() + $this->service_charge - $this->getDiscountPrice();
     }
 
 }

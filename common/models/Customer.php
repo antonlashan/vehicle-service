@@ -44,7 +44,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Customer Name',
             'email' => 'Email',
             'phone' => 'Phone',
             'address' => 'Address',

@@ -11,6 +11,7 @@ use yii\filters\AccessControl;
 use common\models\Registration;
 use common\models\Equipment;
 use yii\helpers\ArrayHelper;
+use common\models\Config;
 
 /**
  * ServiceController implements the CRUD actions for Service model.
@@ -65,6 +66,7 @@ class ServiceController extends Controller {
     {
         return $this->render('view', [
                     'model' => $this->findModel($id),
+                    'registration' => $this->registration,
         ]);
     }
 
@@ -79,26 +81,7 @@ class ServiceController extends Controller {
         $model->date = date("Y-m-d");
         $model->no_of_grease_nipples = $this->registration->vehicleModel->no_of_nipples;
 
-        $equipmentsArr = $this->getAllEquipments();
-        //print_r(\yii\helpers\ArrayHelper::index($equipments, null, 'category'));
-//        print_r($equipments);
-        //exit;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                        'model' => $model,
-                        'registration' => $this->registration,
-                        'equipmentsArr' => $equipmentsArr,
-            ]);
-        }
-    }
-
-    private function getAllEquipments()
-    {
-        $result = Equipment::find()->asArray()->all();
-        return ArrayHelper::index($result, 'id', 'category');
+        return $this->saveService($model);
     }
 
     /**
@@ -111,14 +94,109 @@ class ServiceController extends Controller {
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                        'model' => $model,
-                        'registration' => $this->registration,
-            ]);
+        return $this->saveService($model);
+    }
+
+    private function saveService(Service &$model)
+    {
+        $equipmentsArr = $this->getAllEquipments();
+        $globalChargesArr = $this->getAllGlobalCharges();
+
+//        array_shift($equipmentsArr);
+//print_r($globalChargesArr);exit;
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->registration_id = $this->registration->id;
+            $model->customer_id = $this->registration->customer_id;
+
+            //********************** start equipments ************************
+            if ($model->engine_oil_id) {
+                $model->engine_oil = $equipmentsArr[Equipment::CAT_OIL_ENGINE][$model->engine_oil_id]['name'];
+                $model->engine_oil_price = $equipmentsArr[Equipment::CAT_OIL_ENGINE][$model->engine_oil_id]['price'];
+            }
+            if ($model->oil_filter_id) {
+                $model->oil_filter = $equipmentsArr[Equipment::CAT_FILTER_OIL][$model->oil_filter_id]['name'];
+                $model->oil_filter_price = $equipmentsArr[Equipment::CAT_FILTER_OIL][$model->oil_filter_id]['price'];
+            }
+            if ($model->diesel_filter_id) {
+                $model->diesel_filter = $equipmentsArr[Equipment::CAT_FILTER_DIESEL][$model->diesel_filter_id]['name'];
+                $model->diesel_filter_price = $equipmentsArr[Equipment::CAT_FILTER_DIESEL][$model->diesel_filter_id]['price'];
+            }
+            if ($model->air_filter_id) {
+                $model->air_filter = $equipmentsArr[Equipment::CAT_FILTER_AIR][$model->air_filter_id]['name'];
+                $model->air_filter_price = $equipmentsArr[Equipment::CAT_FILTER_AIR][$model->air_filter_id]['price'];
+            }
+            if ($model->gear_oil_id) {
+                $model->gear_oil = $equipmentsArr[Equipment::CAT_OIL_GEAR][$model->gear_oil_id]['name'];
+                $model->gear_oil_price = $equipmentsArr[Equipment::CAT_OIL_GEAR][$model->gear_oil_id]['price'];
+            }
+            if ($model->differential_oil_id) {
+                $model->differential_oil = $equipmentsArr[Equipment::CAT_OIL_DIFFERENTIAL][$model->differential_oil_id]['name'];
+                $model->differential_oil_price = $equipmentsArr[Equipment::CAT_OIL_DIFFERENTIAL][$model->differential_oil_id]['price'];
+            }
+            if ($model->steering_oil_id) {
+                $model->steering_oil = $equipmentsArr[Equipment::CAT_OIL_POWER][$model->steering_oil_id]['name'];
+                $model->steering_oil_price = $equipmentsArr[Equipment::CAT_OIL_POWER][$model->steering_oil_id]['price'];
+            }
+            if ($model->break_oil_id) {
+                $model->break_oil = $equipmentsArr[Equipment::CAT_OIL_BREAK][$model->break_oil_id]['name'];
+                $model->break_oil_price = $equipmentsArr[Equipment::CAT_OIL_BREAK][$model->break_oil_id]['price'];
+            }
+            if ($model->coolent_oil_id) {
+                $model->coolent_oil = $equipmentsArr[Equipment::CAT_OIL_COOLENT][$model->coolent_oil_id]['name'];
+                $model->coolent_oil_price = $equipmentsArr[Equipment::CAT_OIL_COOLENT][$model->coolent_oil_id]['price'];
+            }
+            //********************** end equipments ************************
+            
+            
+            //********************** start wash ************************
+            if ($model->full_wash) {
+                $model->full_wash_charge = $globalChargesArr[Config::TYPE_FULL_WASH_CHARGE];
+            }
+            if ($model->body_wash) {
+                $model->body_wash_charge = $globalChargesArr[Config::TYPE_BODY_WASH];
+            }
+            if ($model->engine_wash) {
+                $model->engine_wash_charge = $globalChargesArr[Config::TYPE_ENGINE_WASH];
+            }
+            
+            $model->grease_charge = $globalChargesArr[Config::TYPE_GREASE_PER_NIPPLE];
+            
+            if ($model->under_wash) {
+                $model->under_wash_charge = $globalChargesArr[Config::TYPE_UNDER_WASH];
+            }
+            if ($model->vacuume_cleaning) {
+                $model->vacuume_cleaning_charge = $globalChargesArr[Config::TYPE_VACUUME_CLEANING];
+            }
+            $model->discount_amount = $model->getDiscountPrice();
+            //********************** end wash ************************
+            
+            $model->total = $model->getFullTotal();
+
+            if ($model->save()) {
+
+                return $this->redirect(['view', 'id' => $model->id, 'rid' => $this->registration->id]);
+            }
         }
+
+        return $this->render(($model->isNewRecord) ? 'create' : 'update', [
+                    'model' => $model,
+                    'registration' => $this->registration,
+                    'equipmentsArr' => $equipmentsArr,
+                    'globalChargesArr' => $globalChargesArr,
+        ]);
+    }
+
+    private function getAllEquipments()
+    {
+        $result = Equipment::find()->asArray()->all();
+        return ArrayHelper::index($result, 'id', 'category');
+    }
+
+    private function getAllGlobalCharges()
+    {
+        $result = Config::find()->asArray()->all();
+        return ArrayHelper::map($result, 'type', 'price');
     }
 
     /**

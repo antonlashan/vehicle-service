@@ -6,35 +6,37 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Service */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Services', 'url' => ['index']];
+$this->title = $model->getRegistrationNo();
+$this->params['breadcrumbs'][] = ['label' => 'Services', 'url' => ['index', 'rid' => $registration->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="service-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Update', ['update', 'id' => $model->id, 'rid' => $registration->id], ['class' => 'btn btn-primary']) ?>
+        <?=
+        Html::a('Delete', ['delete', 'id' => $model->id, 'rid' => $registration->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ])
+        ?>
     </p>
 
-    <?= DetailView::widget([
+    <?=
+    DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'registration_id',
             'date',
-            'customer_id',
+            'customer.name',
             'current_meter',
             'next_service_meter',
-            'next_service',
+            [
+                'attribute' => 'next_service',
+                'value' => date('Y-m-d', strtotime("+{$model->next_service} Week", strtotime($model->date))) . " (** {$model->next_service} Week(s) **)",
+            ],
             'engine_oil_id',
             'engine_oil',
             'engine_oil_price',
@@ -74,12 +76,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'engine_wash_charge',
             'discount',
             'service_charge',
+            'total',
             'remarks:ntext',
             'created_at',
-            'created_by',
+            [
+                'attribute' => 'created_by',
+                'value' => $model->createdBy->getFullName(),
+            ],
             'updated_at',
-            'updated_by',
+            [
+                'attribute' => 'updated_by',
+                'value' => $model->updatedBy->getFullName(),
+            ],
         ],
-    ]) ?>
+    ])
+    ?>
 
 </div>

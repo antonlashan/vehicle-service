@@ -15,6 +15,13 @@ use yii\db\ActiveRecord;
  */
 class Config extends ActiveRecord {
 
+    const TYPE_BODY_WASH = 'BODY_WASH';
+    const TYPE_ENGINE_WASH = 'ENGINE_WASH';
+    const TYPE_GREASE_PER_NIPPLE = 'GREASE_PER_NIPPLE';
+    const TYPE_UNDER_WASH = 'UNDER_WASH';
+    const TYPE_VACUUME_CLEANING = 'VACUUME_CLEANING';
+    const TYPE_FULL_WASH_CHARGE = 'FULL_WASH_CHARGE';
+
     /**
      * @inheritdoc
      */
