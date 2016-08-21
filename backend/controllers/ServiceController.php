@@ -12,6 +12,9 @@ use common\models\Registration;
 use common\models\Equipment;
 use yii\helpers\ArrayHelper;
 use common\models\Config;
+use backend\models\ImageUploadForm;
+use yii\web\UploadedFile;
+use common\models\Image;
 
 /**
  * ServiceController implements the CRUD actions for Service model.
@@ -48,12 +51,23 @@ class ServiceController extends Controller {
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Service::find(),
+            'query' => Service::find()->where(['registration_id' => $this->registration->id]),
+            'sort' => ['defaultOrder' => ['date' => SORT_DESC]]
         ]);
+
+        $imageUploadForm = new ImageUploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $imageUploadForm->imageFile = UploadedFile::getInstance($imageUploadForm, 'imageFile');
+            if ($imageUploadForm->upload($this->registration)) {
+                return $this->redirect(['index', 'rid' => $this->registration->id]);
+            }
+        }
 
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
                     'registration' => $this->registration,
+                    'imageUploadForm' => $imageUploadForm,
         ]);
     }
 
@@ -102,8 +116,6 @@ class ServiceController extends Controller {
         $equipmentsArr = $this->getAllEquipments();
         $globalChargesArr = $this->getAllGlobalCharges();
 
-//        array_shift($equipmentsArr);
-//print_r($globalChargesArr);exit;
         if ($model->load(Yii::$app->request->post())) {
 
             $model->registration_id = $this->registration->id;
@@ -147,8 +159,6 @@ class ServiceController extends Controller {
                 $model->coolent_oil_price = $equipmentsArr[Equipment::CAT_OIL_COOLENT][$model->coolent_oil_id]['price'];
             }
             //********************** end equipments ************************
-            
-            
             //********************** start wash ************************
             if ($model->full_wash) {
                 $model->full_wash_charge = $globalChargesArr[Config::TYPE_FULL_WASH_CHARGE];
@@ -159,9 +169,9 @@ class ServiceController extends Controller {
             if ($model->engine_wash) {
                 $model->engine_wash_charge = $globalChargesArr[Config::TYPE_ENGINE_WASH];
             }
-            
+
             $model->grease_charge = $globalChargesArr[Config::TYPE_GREASE_PER_NIPPLE];
-            
+
             if ($model->under_wash) {
                 $model->under_wash_charge = $globalChargesArr[Config::TYPE_UNDER_WASH];
             }
@@ -170,7 +180,7 @@ class ServiceController extends Controller {
             }
             $model->discount_amount = $model->getDiscountPrice();
             //********************** end wash ************************
-            
+
             $model->total = $model->getFullTotal();
 
             if ($model->save()) {
@@ -209,7 +219,7 @@ class ServiceController extends Controller {
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'rid' => $this->registration->id]);
     }
 
     /**
@@ -237,6 +247,16 @@ class ServiceController extends Controller {
         }
 
         return parent::beforeAction($action);
+    }
+
+    public function actionDeleteImage($id)
+    {
+        $image = Image::findOne($id);
+        if ($image) {
+            $image->delete();
+        }
+        
+        return $this->redirect(['index', 'rid' => $this->registration->id]);
     }
 
 }

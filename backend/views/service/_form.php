@@ -158,8 +158,12 @@ use common\models\Config;
         </div>
     </div>
     
+    <div class="row">
+        <div class="col-md-8 m-b">
     <?= $form->field($model, 'remarks')->textarea(['rows' => 6]) ?>
-
+</div>
+</div>
+    
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

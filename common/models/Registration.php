@@ -24,6 +24,7 @@ use yii\behaviors\BlameableBehavior;
  * @property User $createdBy
  * @property User $updatedBy
  * @property Service[] $services
+ * @property Image[] $images
  */
 class Registration extends \yii\db\ActiveRecord {
 
@@ -119,6 +120,24 @@ class Registration extends \yii\db\ActiveRecord {
     public function getServices()
     {
         return $this->hasMany(Service::className(), ['registration_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(Image::className(), ['registration_id' => 'id']);
+    }
+
+    public function getRegistrationNo()
+    {
+        return str_pad($this->id, 6, "0", STR_PAD_LEFT);
+    }
+
+    public function getImgUploadPath()
+    {
+        return Yii::$app->params['imageUploadPath'] . DIRECTORY_SEPARATOR . $this->id;
     }
 
 }

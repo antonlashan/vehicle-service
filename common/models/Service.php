@@ -109,9 +109,9 @@ class Service extends ActiveRecord {
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'registration_id' => 'Registration ID',
-            'date' => 'Date',
+            'id' => 'Service ID',
+            'registration_id' => 'Registration No',
+            'date' => 'Service Date',
             'customer_id' => 'Customer ID',
             'current_meter' => 'Current Meter',
             'next_service_meter' => 'Next Service Meter',
@@ -250,7 +250,7 @@ class Service extends ActiveRecord {
         return $data;
     }
 
-    public function getRegistrationNo()
+    public function getServiceNo()
     {
         return str_pad($this->id, 6, "0", STR_PAD_LEFT);
     }
@@ -258,6 +258,11 @@ class Service extends ActiveRecord {
     public function getGreaseChargeAmount()
     {
         return $this->no_of_grease_nipples * $this->grease_charge;
+    }
+
+    public function getGreaseChargeAmountLabel()
+    {
+        return number_format($this->getGreaseChargeAmount(), 2) . " ({$this->no_of_grease_nipples} * {$this->grease_charge})";
     }
 
     /**
@@ -292,21 +297,12 @@ class Service extends ActiveRecord {
         return $total;
     }
 
-    public function getEquipmentCharges()
+    public function getLubricationCharges()
     {
         $total = 0;
 
         if ($this->engine_oil_id) {
             $total += $this->engine_oil_price;
-        }
-        if ($this->oil_filter_id) {
-            $total += $this->oil_filter_price;
-        }
-        if ($this->diesel_filter_id) {
-            $total += $this->diesel_filter_price;
-        }
-        if ($this->air_filter_id) {
-            $total += $this->air_filter_price;
         }
         if ($this->gear_oil_id) {
             $total += $this->gear_oil_price;
@@ -327,9 +323,31 @@ class Service extends ActiveRecord {
         return $total;
     }
 
+    public function getFilterCharges()
+    {
+        $total = 0;
+
+        if ($this->oil_filter_id) {
+            $total += $this->oil_filter_price;
+        }
+        if ($this->diesel_filter_id) {
+            $total += $this->diesel_filter_price;
+        }
+        if ($this->air_filter_id) {
+            $total += $this->air_filter_price;
+        }
+
+        return $total;
+    }
+
     public function getFullTotal()
     {
-        return $this->getEquipmentCharges() + $this->getWashCategoriesTotal() + $this->getGreaseChargeAmount() + $this->service_charge - $this->getDiscountPrice();
+        return $this->getLubricationCharges() + $this->getFilterCharges() + $this->getWashCategoriesTotal() + $this->getGreaseChargeAmount() + $this->service_charge - $this->getDiscountPrice();
+    }
+
+    public function getFormattedNextServiceLabel()
+    {
+        return date('Y-m-d', strtotime("+{$this->next_service} Week", strtotime($this->date))) . " ({$this->next_service} Weeks)";
     }
 
 }
