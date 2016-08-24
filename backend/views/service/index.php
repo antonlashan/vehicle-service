@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $registration->getRegistrationNo();
                     </div>
             <?php } ?>
             </div>
-            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'enableClientValidation' => false]) ?>
 
         <?= $form->field($imageUploadForm, 'imageFile')->fileInput() ?>
 

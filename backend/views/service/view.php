@@ -78,37 +78,43 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php if ($model->engine_oil_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->engine_oil_price ?></span>
-                                    <?= $model->getAttributeLabel('engine_oil') ?>
+                                    <?= $model->getAttributeLabel('engine_oil') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->engine_oil ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->gear_oil_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->gear_oil_price ?></span>
-                                    <?= $model->getAttributeLabel('gear_oil') ?>
+                                    <?= $model->getAttributeLabel('gear_oil') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->gear_oil ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->differential_oil_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->differential_oil_price ?></span>
-                                    <?= $model->getAttributeLabel('differential_oil') ?>
+                                    <?= $model->getAttributeLabel('differential_oil') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->differential_oil ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->steering_oil_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->steering_oil_price ?></span>
-                                    <?= $model->getAttributeLabel('steering_oil') ?>
+                                    <?= $model->getAttributeLabel('steering_oil') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->steering_oil ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->break_oil_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->break_oil_price ?></span>
-                                    <?= $model->getAttributeLabel('break_oil') ?>
+                                    <?= $model->getAttributeLabel('break_oil') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->break_oil ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->coolent_oil_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->coolent_oil_price ?></span>
-                                    <?= $model->getAttributeLabel('coolent_oil') ?>
+                                    <?= $model->getAttributeLabel('coolent_oil') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->coolent_oil ?></em></span>
                                 </a>
                             <?php } ?>
 
@@ -129,19 +135,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php if ($model->oil_filter_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->oil_filter_price ?></span>
-                                    <?= $model->getAttributeLabel('oil_filter') ?>
+                                    <?= $model->getAttributeLabel('oil_filter') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->oil_filter ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->diesel_filter_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->diesel_filter_price ?></span>
-                                    <?= $model->getAttributeLabel('diesel_filter') ?>
+                                    <?= $model->getAttributeLabel('diesel_filter') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->diesel_filter ?></em></span>
                                 </a>
                             <?php } ?>
                             <?php if ($model->air_filter_id) { ?>
                                 <a class="list-group-item">
                                     <span class="badge"><?= $model->air_filter_price ?></span>
-                                    <?= $model->getAttributeLabel('air_filter') ?>
+                                    <?= $model->getAttributeLabel('air_filter') ?><br/>
+                                    <span class="text-muted small"><em><?= $model->air_filter ?></em></span>
                                 </a>
                             <?php } ?>
 

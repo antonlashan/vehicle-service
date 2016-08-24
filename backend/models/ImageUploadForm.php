@@ -17,7 +17,7 @@ class ImageUploadForm extends Model {
     public function rules()
     {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => ['png', 'jpg', 'jpeg']],
         ];
     }
 
@@ -28,12 +28,14 @@ class ImageUploadForm extends Model {
             if (!file_exists($registration->getImgUploadPath())) {
                 mkdir($registration->getImgUploadPath(), 0777, true);
             }
+            
+            $baseName = date('YmdHis') . '.' . $this->imageFile->extension;
 
-            $this->imageFile->saveAs($registration->getImgUploadPath() . DIRECTORY_SEPARATOR . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            $this->imageFile->saveAs($registration->getImgUploadPath() . DIRECTORY_SEPARATOR . $baseName);
             
             $image = new Image();
             $image->registration_id = $registration->id;
-            $image->name = $this->imageFile->baseName . '.' . $this->imageFile->extension;
+            $image->name = $baseName;
             $image->save();
             
             return true;

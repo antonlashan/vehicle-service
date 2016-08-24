@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%image}}".
@@ -30,7 +31,7 @@ class Image extends \yii\db\ActiveRecord {
     {
         return [
             [['registration_id'], 'integer'],
-            [['name'], 'string', 'max' => 20],
+            [['name'], 'string', 'max' => 100],
             [['registration_id'], 'exist', 'skipOnError' => true, 'targetClass' => Registration::className(), 'targetAttribute' => ['registration_id' => 'id']],
         ];
     }
@@ -60,11 +61,27 @@ class Image extends \yii\db\ActiveRecord {
         return $this->registration->getImgUploadPath() . DIRECTORY_SEPARATOR . $this->name;
     }
 
+    public function getImageRelativePath()
+    {
+        return str_replace(realpath(Yii::$app->basePath . DIRECTORY_SEPARATOR . '..'), '', realpath($this->getImagePath()));
+    }
+
+    public function getThumbnail($opt = [])
+    {
+        $q = '';
+        if($opt){
+            foreach ($opt as $attr => $val){
+                $q .= "&$attr=$val";
+            }
+        }
+        return Url::base() . "/t.php?src={$this->getImageRelativePath()}{$q}";
+    }
+
     public function delete()
     {
         $path = $this->getImagePath();
 
-        if (parent::delete()) {
+        if (parent::delete() !== false) {
             if (is_file($path)) {
                 unlink($path);
             }
