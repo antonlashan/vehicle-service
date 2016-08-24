@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'vehicle.name',
+                'vehicleMake.name',
                 'model',
                 'no_of_nipples',
                 [

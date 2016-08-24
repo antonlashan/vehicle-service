@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Service */
+/* @var $registration common\models\Registration */
 
 $this->title = $model->getServiceNo();
 $this->params['breadcrumbs'][] = ['label' => 'Services', 'url' => ['index', 'rid' => $registration->id]];
@@ -59,6 +59,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <th><?= $model->getAttributeLabel('next_service') ?></th>
                                     <td><?= $model->getFormattedNextServiceLabel() ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?= $registration->getAttributeLabel('vehicleModel.vehicle.name') ?></th>
+                                    <td><?= $registration->vehicleModel->vehicle->name ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?= $registration->getAttributeLabel('vehicleModel.vehicleMake.name') ?></th>
+                                    <td><?= $registration->vehicleModel->vehicleMake->name ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?= $registration->getAttributeLabel('vehicleModel.model') ?></th>
+                                    <td><?= $registration->vehicleModel->model ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?= $registration->getAttributeLabel('vehicle_no') ?></th>
+                                    <td><?= $registration->vehicle_no ?></td>
                                 </tr>
                             </tbody>
                         </table>

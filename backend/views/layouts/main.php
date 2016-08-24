@@ -48,6 +48,7 @@ AppAsset::register($this);
                         'label' => 'Master Data',
                         'items' => [
                             ['label' => 'Vehicles', 'url' => ['/vehicle/index']],
+                            ['label' => 'Vehicle Makes', 'url' => ['/vehicle-make/index']],
                             ['label' => 'Vehicle Models', 'url' => ['/vehicle-model/index']],
                             ['label' => 'Equipments', 'url' => ['/equipment/index']],
                             ['label' => 'Configurations', 'url' => ['/config/index']],

@@ -11,7 +11,7 @@ use common\models\Customer;
 use common\models\Vehicle;
 use common\models\VehicleModel;
 use yii\helpers\ArrayHelper;
-use common\models\Service;
+use common\models\VehicleMake;
 
 class RegistrationController extends Controller {
 
@@ -44,7 +44,7 @@ class RegistrationController extends Controller {
         if ($registration === null) {
             $registration = new Registration();
         } else {
-            $vehicleModels = $this->getVehicleModels($registration->vehicleModel->vehicle_id);
+            $vehicleModels = $this->getVehicleModels($registration->vehicleModel->vehicle_id, $registration->vehicleModel->vehicle_make_id);
             $vehicleModels = ArrayHelper::map($vehicleModels, 'id', 'model');
         }
 
@@ -73,6 +73,7 @@ class RegistrationController extends Controller {
             }
         }
         $vehicleList = Vehicle::find()->asArray()->all();
+        $vehicleMakeList = VehicleMake::find()->asArray()->all();
 
         return $this->render('index', [
                     'searchModel' => $searchModel,
@@ -81,21 +82,32 @@ class RegistrationController extends Controller {
                     'vehicleList' => ArrayHelper::map($vehicleList, 'id', 'name'),
                     'vehicleNo' => $searchModel->vehicle_no,
                     'vehicleModels' => $vehicleModels,
+                    'vehicleMakeList' => ArrayHelper::map($vehicleMakeList, 'id', 'name'),
         ]);
     }
 
     /**
      * 
-     * @param integer $id vehicle id
+     * @param integer $typeId vehicle type id
+     * @param integer $makeId vehicle make id
      */
-    protected function getVehicleModels($id)
+    protected function getVehicleModels($typeId, $makeId)
     {
-        return VehicleModel::find()->where(['vehicle_id' => $id])->asArray()->all();
+        $q = VehicleModel::find();
+
+        if ($typeId) {
+            $q->andWhere(['vehicle_id' => $typeId]);
+        }
+
+        if ($makeId) {
+            $q->andWhere(['vehicle_make_id' => $makeId]);
+        }
+        return $q->asArray()->all();
     }
 
-    public function actionGetModels($id)
+    public function actionGetModels($typeId, $makeId)
     {
-        $models = $this->getVehicleModels($id);
+        $models = $this->getVehicleModels($typeId, $makeId);
 
         $options = '<option value="">select a model</option>';
         foreach ($models as $model) {

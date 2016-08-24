@@ -3,24 +3,23 @@
 namespace common\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "{{%vehicle}}".
+ * This is the model class for table "{{%vehicle_make}}".
  *
  * @property integer $id
  * @property string $name
  *
  * @property VehicleModel[] $vehicleModels
  */
-class Vehicle extends ActiveRecord {
-
+class VehicleMake extends \yii\db\ActiveRecord
+{
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%vehicle}}';
+        return '{{%vehicle_make}}';
     }
 
     /**
@@ -29,7 +28,7 @@ class Vehicle extends ActiveRecord {
     public function rules()
     {
         return [
-            [['name'], 'string', 'max' => 15],
+            [['name'], 'string', 'max' => 20],
         ];
     }
 
@@ -40,7 +39,7 @@ class Vehicle extends ActiveRecord {
     {
         return [
             'id' => 'ID',
-            'name' => 'Type',
+            'name' => 'Make',
         ];
     }
 
@@ -49,7 +48,6 @@ class Vehicle extends ActiveRecord {
      */
     public function getVehicleModels()
     {
-        return $this->hasMany(VehicleModel::className(), ['vehicle_id' => 'id']);
+        return $this->hasMany(VehicleModel::className(), ['vehicle_make_id' => 'id']);
     }
-
 }

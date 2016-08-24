@@ -49,16 +49,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->errorSummary([$registration, $customer]) ?>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label for="make" class="control-label">Make</label>
-                    <?= Html::dropDownList('make', isset($registration->vehicleModel) ? $registration->vehicleModel->vehicle_id : null, $vehicleList, ['class' => 'form-control', 'id' => 'make', 'prompt' => 'select a make']); ?>
+                    <label for="make" class="control-label">Type</label>
+                    <?= Html::dropDownList('type', isset($registration->vehicleModel) ? $registration->vehicleModel->vehicle_id : null, $vehicleList, ['class' => 'form-control', 'id' => 'type', 'prompt' => 'select a type']); ?>
                     <div class="help-block"></div>
                 </div>
 
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="make" class="control-label">Make</label>
+                    <?= Html::dropDownList('make', isset($registration->vehicleModel) ? $registration->vehicleModel->vehicle_make_id : null, $vehicleMakeList, ['class' => 'form-control', 'id' => 'make', 'prompt' => 'select a make']); ?>
+                    <div class="help-block"></div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
                 <?= $form->field($registration, 'vehicle_model_id')->dropDownList($vehicleModels, ['prompt' => 'select a model']) ?>
             </div>
 
